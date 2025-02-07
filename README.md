@@ -1,4 +1,3 @@
-# conversion-system-report-service
 # Тестовое задание для стажера-разработчика
 
 ## Задача 1
