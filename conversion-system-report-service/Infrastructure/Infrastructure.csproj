@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>KafkaInfrastructure</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Confluent.Kafka" Version="2.8.0" />
+      <PackageReference Include="Google.Protobuf" Version="3.29.3" />
+      <PackageReference Include="Itmo.Dev.Platform.Common" Version="1.3.255" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Kafka\" />
+      <Folder Include="Repositories\Entities\" />
+      <Folder Include="Repositories\Extensions\" />
+      <Folder Include="Repositories\Interfaces\" />
+      <Folder Include="Repositories\Models\" />
+      <Folder Include="Repositories\Options\" />
+    </ItemGroup>
+
+</Project>
