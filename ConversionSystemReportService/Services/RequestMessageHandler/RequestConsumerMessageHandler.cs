@@ -1,7 +1,5 @@
 ﻿using KafkaInfrastructure.Consumer;
-using KafkaInfrastructure.Consumer;
 using Request.Kafka.Contracts;
-using System.Threading.Channels;
 
 namespace conversionSystemReportService.Services.RequestMessageHandler;
 
