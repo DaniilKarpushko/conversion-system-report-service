@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversionSystemReportService", "ConversionSystemReportService\ConversionSystemReportService.csproj", "{71557B2A-6217-496E-BAB3-8304D3C146F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B951262A-271B-4850-90BA-08C81CF24A19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71557B2A-6217-496E-BAB3-8304D3C146F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71557B2A-6217-496E-BAB3-8304D3C146F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71557B2A-6217-496E-BAB3-8304D3C146F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71557B2A-6217-496E-BAB3-8304D3C146F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B951262A-271B-4850-90BA-08C81CF24A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B951262A-271B-4850-90BA-08C81CF24A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B951262A-271B-4850-90BA-08C81CF24A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B951262A-271B-4850-90BA-08C81CF24A19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
