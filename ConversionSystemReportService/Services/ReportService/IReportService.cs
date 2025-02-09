@@ -1,12 +1,13 @@
 ﻿using conversionSystemReportService.Records;
+using Request.Kafka.Contracts;
 
 namespace conversionSystemReportService.Services.ReportService;
 
 public interface IReportService
 {
-    public Task<ReportResult> GetReportStatus(string reportId); 
+    public Task<ReportResult> GetReportStatusAsync(string reportId, CancellationToken cancellationToken); 
     
-    public Task CreateReport(string reportId, string productId, string orderId);
+    public Task CreateReportAsync(ReportResult reportObj, CancellationToken cancellationToken);
 
-    public Task UpdateReport(ReportResult reportResult);
+    public Task UpdateReportAsync(ReportResult reportResult, CancellationToken cancellationToken);
 }

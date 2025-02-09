@@ -14,4 +14,6 @@ public class ShardedDbContext : DbContext
     public DbSet<Purchased> Purchased { get; set; }
     
     public DbSet<Viewed> Viewed { get; set; }
+    
+    public DbSet<Report> Reports { get; set; }
 }

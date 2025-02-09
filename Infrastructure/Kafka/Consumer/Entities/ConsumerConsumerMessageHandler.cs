@@ -25,7 +25,7 @@ public class ConsumerConsumerMessageHandler<TKey, TValue> : IConsumerMessageHand
                     currentBatchingOptions.BatchSize,
                     TimeSpan.FromMilliseconds(currentBatchingOptions.BatchTimeout));
 
-            await _messageHandler.HandleMessagesAsync(messages, cancellationToken);
+            await _messageHandler.HandleBatchesAsync(messages, cancellationToken);
         }
     }
 }

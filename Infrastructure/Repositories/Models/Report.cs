@@ -6,7 +6,7 @@ public class Report
     
     public double Ratio { get; set; }
     
-    public uint PurchaseAmount { get; set; }
+    public int PurchaseAmount { get; set; }
     
     public ReportState State { get; set; }
 }
