@@ -1,5 +1,5 @@
 services:
-  postgres-objects-2024:
+  postgres-objects-1:
     image: postgres:latest
     container_name: object-database-1
     environment:
@@ -10,7 +10,7 @@ services:
       - "5433:5432"
     restart: unless-stopped
   
-  postgres-objects-2025:
+  postgres-objects-2:
     image: postgres:latest
     container_name: object-database-2
     environment:
