@@ -1,16 +1,28 @@
 ﻿using Confluent.Kafka;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KafkaInfrastructure.Repositories.Models;
 
+[Table("viewed")]
 public class Viewed
 {
-    public string UserId { get; set; } = null!;
+    [Key]
+    [Column("view_id")]
+    public int ViewId { get; set; }
+
+    [Column("user_id")]
+    public int UserId { get; set; }
     
-    public string ProductId { get; set; } = null!;
+    [Column("product_id")]
+    public int ProductId { get; set; }
     
+    [Column("product")]
     public Product Product { get; set; } = null!;
     
+    [Column("user")]
     public User User { get; set; } = null!;
     
-     public DateTime ViewedAt { get; set; }
+    [Column("viewed_at")]
+    public DateTime ViewedAt { get; set; }
 }

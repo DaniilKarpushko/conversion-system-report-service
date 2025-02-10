@@ -8,11 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Protoroot="Protos" Include="Protos\request.proto" GrpcServices="Server" />
+        <Protobuf Protoroot="Protos" Include="Protos\request.proto" />
+        <Protobuf Protoroot="Protos" Include="Protos\report.proto" GrpcServices="Server" />
+        <Protobuf Protoroot="Protos" Include="Protos\reportstatus.proto" />
     </ItemGroup>
     
     <ItemGroup>
+        <PackageReference Include="FluentMigrator" Version="6.2.0" />
+        <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="6.2.0" />
+        <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
+        <PackageReference Include="FluentMigrator.Runner.Postgres" Version="6.2.0" />
         <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+        <PackageReference Include="Grpc.AspNetCore.Server" Version="2.67.0" />
         <PackageReference Include="Grpc.Core" Version="2.46.6" />
         <PackageReference Include="Grpc.Core.Api" Version="2.67.0" />
         <PackageReference Include="Grpc.Net.Common" Version="2.67.0" />

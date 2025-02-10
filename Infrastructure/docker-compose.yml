@@ -19,4 +19,56 @@ services:
       - POSTGRES_DB=object_2
     ports:
       - "5434:5432"
-    restart: unless-stopped  
+    restart: unless-stopped 
+      
+  postgres-outbox:
+    image: postgres:latest
+    container_name: outbox-database
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=outbox
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+  
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    restart: unless-stopped
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  
+  kafka:
+    image: wurstmeister/kafka:latest
+    restart: unless-stopped
+    environment:
+      KAFKA_LOG_DIRS: /kafka-data
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://127.0.0.1:8100,INTERNAL://kafka:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CREATE_TOPICS: >
+        report_request:1:1
+    depends_on:
+      - zookeeper
+    ports:
+      - '8100:9092'
+  
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - /path/to/local/dаta:/root/redis
+      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=redis
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+
+
+    

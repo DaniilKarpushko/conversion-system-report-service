@@ -1,13 +1,16 @@
-﻿namespace KafkaInfrastructure.Repositories.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace KafkaInfrastructure.Repositories.Models;
+
+[Table("product")]
 public class Product
 {
-    public string ProductId { get; set; } = string.Empty;
+    [Column("product_id")]
+    public int ProductId { get; set; }
 
+    [Column("product_name")]
     public string ProductName { get; set; } = string.Empty;
     
+    [Column("price")]
     public decimal Price { get; set; }
-    
-    public List<Purchased> PostTags { get; } = [];
-    public List<Viewed> ViewedTags { get; } = [];
 }

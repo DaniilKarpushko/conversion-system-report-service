@@ -1,9 +1,8 @@
 ﻿using conversionSystemReportService.Records;
-using conversionSystemReportService.Services.ReportService;
 using KafkaInfrastructure.Repositories.Entities;
-using KafkaInfrastructure.Repositories.Models;
 using Microsoft.EntityFrameworkCore;
-using Request.Kafka.Contracts;
+using Proto.Contracts;
+
 
 namespace conversionSystemReportService.Services.ConversionService;
 
@@ -20,36 +19,32 @@ public class ConversionService : IConversionService
 
     public async Task ConvertAsync(RequestValue requestValue, CancellationToken cancellationToken)
     {
+        
         try
         {
-           await using var dbContext = _shardedDbContextFactory.CreateDbContext(requestValue.ObjectId);
-           await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+            Console.WriteLine("startedConversion");
+           await using var dbContext = _shardedDbContextFactory.CreateDbContext(requestValue.ProductId);
            
            var purchaseCount = await dbContext.Purchased
-               .Where(o => o.ProductId == requestValue.ObjectId 
+               .Where(o => o.ProductId == requestValue.ProductId
                            && o.PurchasedAt >= requestValue.Start.ToDateTime() 
                            && o.PurchasedAt <= requestValue.End.ToDateTime())
                .CountAsync(cancellationToken);
            
            var viewCount = await dbContext.Viewed
-               .Where(v => v.ProductId == requestValue.ObjectId 
+               .Where(v => v.ProductId == requestValue.ProductId
                            && v.ViewedAt >= requestValue.Start.ToDateTime() 
                            && v.ViewedAt <= requestValue.End.ToDateTime())
                .CountAsync(cancellationToken);
 
            var ratio = (double)purchaseCount / viewCount;
-           var report = new ReportResult.Completed(CreateReportId(requestValue), ratio, purchaseCount);
+           var report = new ReportResult.Completed(requestValue.RequestId, ratio, purchaseCount);
 
-           await _reportService.CreateReportAsync(report, cancellationToken);
+           await _reportService.AddReportAsync(report, cancellationToken);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
-    }
-    
-    private string CreateReportId(RequestValue requestValue)
-    {
-        return $"{requestValue.ObjectId}_{requestValue.OrderId}_{requestValue.Start}_{requestValue.End}";
     }
 }

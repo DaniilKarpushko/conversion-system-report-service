@@ -3,21 +3,16 @@ using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace KafkaInfrastructure.Redis.RedisService;
+namespace KafkaInfrastructure.Redis;
 
 public class RedisService<T> : ICacheService<T>
 {
-    private readonly ConnectionMultiplexer _connectionMultiplexer;
+    private readonly IConnectionMultiplexer _connectionMultiplexer;
     private IOptionsMonitor<RedisOptions> _redisOptions;
 
-    public RedisService(IOptionsMonitor<RedisOptions> redisOptions)
+    public RedisService(IOptionsMonitor<RedisOptions> redisOptions, IConnectionMultiplexer connectionMultiplexer)
     {
-        var config = new ConfigurationOptions
-        {
-            EndPoints = { redisOptions.CurrentValue.Endpoint },
-        };
-        
-        _connectionMultiplexer = ConnectionMultiplexer.Connect(config);
+        _connectionMultiplexer = connectionMultiplexer;
         _redisOptions = redisOptions;
     }
 
@@ -43,7 +38,7 @@ public class RedisService<T> : ICacheService<T>
             var database = _connectionMultiplexer.GetDatabase();
             var json = await database.StringGetAsync(key);
             
-            return json is { HasValue: true, IsNull: false } ? JsonSerializer.Deserialize<T>(json) : default;
+            return json is { HasValue: true, IsNull: false } ? JsonSerializer.Deserialize<T>(json!) : default;
         }
         catch (Exception e)
         {

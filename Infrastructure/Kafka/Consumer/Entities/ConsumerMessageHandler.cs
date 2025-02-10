@@ -4,10 +4,18 @@ using System.Threading.Channels;
 
 namespace KafkaInfrastructure.Consumer.Entities;
 
-public class ConsumerConsumerMessageHandler<TKey, TValue> : IConsumerMessageHandler<TKey, TValue>
+public class ConsumerMessageHandler<TKey, TValue> : IConsumerMessageHandler<TKey, TValue>
 {
     private readonly IMessageHandler<TKey,TValue> _messageHandler;
     private IOptionsMonitor<BatchingOptions> _batchingOptionsMonitor;
+
+    public ConsumerMessageHandler(
+        IMessageHandler<TKey, TValue> messageHandler,
+        IOptionsMonitor<BatchingOptions> batchingOptionsMonitor)
+    {
+        _messageHandler = messageHandler;
+        _batchingOptionsMonitor = batchingOptionsMonitor;
+    }
 
     public async Task HandleAsync(
         ChannelReader<KeyValuePair<TKey, TValue>> channelReader,

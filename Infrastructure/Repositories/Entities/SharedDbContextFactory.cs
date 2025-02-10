@@ -16,25 +16,25 @@ public class SharedDbContextFactory
         _shardingOptions = shardingOptions;
     }
     
-    public ShardedDbContext CreateDbContext(string objectId)
+    public ShardedReportDbContext CreateDbContext(int objectId)
     {
-        var connectionString = GetConnectionString(objectId);
+        var connectionString = GetConnectionString(GetShardNumber(objectId));
         ArgumentNullException.ThrowIfNull(connectionString);
 
-        var options = new DbContextOptionsBuilder<ShardedDbContext>()
+        var options = new DbContextOptionsBuilder<ShardedReportDbContext>()
             .UseNpgsql(connectionString)
             .Options;
         
-        return new ShardedDbContext(options);
+        return new ShardedReportDbContext(options);
 
     }
 
-    public int GetShardNumber(string productId)
+    private int GetShardNumber(int productId)
     {
-        return productId.GetHashCode(StringComparison.Ordinal) % _shardingOptions.Value.ShardCount;
+        return productId % _shardingOptions.Value.ShardCount;
     }
     
-    private string? GetConnectionString(string shardId)
+    private string? GetConnectionString(int shardId)
     {
         return _configuration.GetConnectionString($"Products_{shardId}");
     }

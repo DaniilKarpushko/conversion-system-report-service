@@ -1,4 +1,4 @@
-﻿namespace KafkaInfrastructure.Redis.RedisService;
+﻿namespace KafkaInfrastructure.Redis;
 
 public interface ICacheService<T>
 {

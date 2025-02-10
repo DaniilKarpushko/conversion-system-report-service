@@ -53,7 +53,6 @@ public class ConsumerMessageReader<TKey, TValue> : IConsumerMessageReader<TKey, 
         {
             BootstrapServers = _kafkaOptions.Host,
             GroupId = _kafkaConsumerOptions.CurrentValue.Group,
-            GroupInstanceId = _kafkaConsumerOptions.CurrentValue.InstanceId,
             EnableAutoCommit = false,
         };
 

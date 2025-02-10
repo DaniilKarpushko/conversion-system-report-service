@@ -1,4 +1,4 @@
-﻿using Request.Kafka.Contracts;
+﻿using Proto.Contracts;
 
 namespace conversionSystemReportService.Services.ConversionService;
 

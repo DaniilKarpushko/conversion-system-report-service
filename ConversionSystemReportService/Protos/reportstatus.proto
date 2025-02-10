@@ -1,7 +1,7 @@
 syntax = "proto3";
 package reportstatus;
 
-option csharp_namespace = "ReportStatus.Contracts";
+option csharp_namespace = "Proto.Contracts";
 
 message ReportStatus {
   oneof report_status {
@@ -13,7 +13,7 @@ message ReportStatus {
 message ReportCompleted {
   string report_id = 1;
   double ratio = 2;
-  uint32 count = 3;
+  int32 count = 3;
 }
 
 message ReportFailed {

@@ -3,7 +3,6 @@
 public enum ReportState
 {
     Unknown = 0,
-    Processed,
     Failed,
     Completed,
 }

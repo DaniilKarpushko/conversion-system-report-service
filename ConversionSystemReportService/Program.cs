@@ -1,7 +1,16 @@
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Grpc.AspNetCore.Server;
 using conversionSystemReportService;
+using conversionSystemReportService.Extensions;
+using ConversionSystemReportService.Services;
 
-var builder = Host.CreateApplicationBuilder(args);
-// builder.Services.AddHostedService<>();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureService(builder.Configuration);
 
-var host = builder.Build();
-host.Run();
+
+var app = builder.Build();
+app.MapGrpcService<ReportServiceGrpc>();
+app.Run();

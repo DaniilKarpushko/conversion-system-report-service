@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversionSystemReportServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B951262A-271B-4850-90BA-08C81CF24A19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{77FED096-540C-4A13-A121-9BF0DF45EACC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportSystemClient", "ReportSystemClient\ReportSystemClient.csproj", "{77FED096-540C-4A13-A121-9BF0DF45EACC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

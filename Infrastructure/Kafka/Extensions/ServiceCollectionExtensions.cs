@@ -9,14 +9,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddKafkaOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        serviceCollection.AddOptions<IOptionsMonitor<KafkaOptions>>()
-            .Bind(configuration.GetSection("KafkaOptions"));
-        serviceCollection.AddOptions<IOptionsMonitor<ConsumerKafkaOptions>>()
-            .Bind(configuration.GetSection("ConsumerKafkaOptions"));
-        serviceCollection.AddOptions<IOptionsMonitor<ProducerKafkaOptions>>()
-            .Bind(configuration.GetSection("ProducerKafkaOptions"));
-        serviceCollection.AddOptions<IOptionsMonitor<BatchingOptions>>()
-            .Bind(configuration.GetSection("BatchingOptions"));
+        serviceCollection.Configure<KafkaOptions>(configuration.GetSection("KafkaOptions"));
+        serviceCollection.Configure<ConsumerKafkaOptions>(configuration.GetSection("ConsumerKafkaOptions"));
+        serviceCollection.Configure<ProducerKafkaOptions>(configuration.GetSection("ProducerKafkaOptions"));
+        serviceCollection.Configure<BatchingOptions>(configuration.GetSection("BatchingOptions"));
 
         return serviceCollection;
     }

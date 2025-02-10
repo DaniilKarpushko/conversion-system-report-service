@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>ApiGateway</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentMigrator" Version="6.2.0" />
+        <PackageReference Include="FluentMigrator.Runner.Core" Version="6.2.0" />
+        <PackageReference Include="FluentMigrator.Runner.Postgres" Version="6.2.0" />
+        <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
+        <PackageReference Include="Google.Protobuf" Version="3.29.3" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+        <PackageReference Include="Grpc.AspNetCore.Server" Version="2.67.0" />
+        <PackageReference Include="Grpc.Core.Api" Version="2.67.0" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
+        <PackageReference Include="Grpc.Net.ClientFactory" Version="2.67.0" />
+        <PackageReference Include="Grpc.Net.Common" Version="2.67.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.69.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
+        <PackageReference Include="Npgsql" Version="9.0.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Protoroot="Protos" Include="Protos\request.proto" />
+        <Protobuf Protoroot="Protos" Include="Protos\report.proto" GrpcServices="Client" />
+        <Protobuf Protoroot="Protos" Include="Protos\reportstatus.proto" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

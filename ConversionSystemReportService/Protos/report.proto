@@ -2,17 +2,18 @@ syntax = "proto3";
 
 package report;
 
-option csharp_namespace = "Report.Contracts";
+option csharp_namespace = "Proto.Contracts";
 import "reportstatus.proto";
+import "request.proto";
 
 service ReportService {
-  rpc GetReport(GetReportRequest) returns (GetReportResponse);
+  rpc GetReport(GetReportRequest) returns (reportstatus.ReportStatus);
 }
 
 message GetReportRequest {
   string report_id = 1;
 }
 
-message GetReportResponse {
-  reportstatus.ReportStatus report = 1;
+message CreateResponse {
+  string message = 1;
 }

@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+package request;
+
+option csharp_namespace = "Client.Contracts";
+
+import "google/protobuf/timestamp.proto";
+
+message RequestKey {
+  string id = 1;
+}
+
+message RequestValue {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+  int32 object_id = 3;
+  string order_id = 4;
+}

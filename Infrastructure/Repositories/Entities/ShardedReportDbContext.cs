@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KafkaInfrastructure.Repositories.Entities;
 
-public class ShardedDbContext : DbContext
+public class ShardedReportDbContext : DbContext
 {
-    public ShardedDbContext(DbContextOptions<ShardedDbContext> options) : base(options) { }
+    public ShardedReportDbContext(DbContextOptions<ShardedReportDbContext> options) : base(options) { }
     
     public DbSet<User> Users { get; set; }
     
