@@ -19,18 +19,18 @@ public class ReportClientService : IReportClientService
 
     public async Task<RequestResult> CreateReportAsync(
         int productId,
-        DateTime start,
-        DateTime end,
+        DateTime startDate,
+        DateTime endDate,
         CancellationToken cancellationToken)
     {
         try
         {
-            var id = GenerateRequestKey(productId, start, end);
+            var id = GenerateRequestKey(productId, startDate, endDate);
             var request = new Request
             {
                 ProductId = productId,
-                Start = start,
-                End = end,
+                Start = startDate,
+                End = endDate,
                 RequestId = id,
             };
             
