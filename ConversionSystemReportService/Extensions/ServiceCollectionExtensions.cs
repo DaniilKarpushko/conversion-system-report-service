@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddRedis(configuration);
         serviceCollection.Configure<ShardingOptions>(configuration.GetSection("ShardingOptions"));
 
-        serviceCollection.AddSingleton<SharedDbContextFactory>();
+        serviceCollection.AddSingleton<IShardedDbContextFactory, ShardedDbContextFactory>();
 
         serviceCollection.AddScoped<ICacheService<ReportResult>, RedisService<ReportResult>>();
         serviceCollection.AddScoped<IReportService, ReportService>();

@@ -9,10 +9,10 @@ namespace conversionSystemReportService.Services;
 
 public class ReportService : IReportService
 {
-    private readonly SharedDbContextFactory _shardedDbContextFactory;
+    private readonly IShardedDbContextFactory _shardedDbContextFactory;
     private readonly ICacheService<ReportResult> _cacheService;
 
-    public ReportService(SharedDbContextFactory shardedDbContextFactory, ICacheService<ReportResult> cacheService)
+    public ReportService(IShardedDbContextFactory shardedDbContextFactory, ICacheService<ReportResult> cacheService)
     {
         _shardedDbContextFactory = shardedDbContextFactory;
         _cacheService = cacheService;

@@ -9,9 +9,9 @@ namespace conversionSystemReportService.Services.ConversionService;
 public class ConversionService : IConversionService
 {
     private readonly IReportService _reportService;
-    private readonly SharedDbContextFactory _shardedDbContextFactory;
+    private readonly IShardedDbContextFactory _shardedDbContextFactory;
 
-    public ConversionService(IReportService reportService, SharedDbContextFactory shardedDbContextFactory)
+    public ConversionService(IReportService reportService, IShardedDbContextFactory shardedDbContextFactory)
     {
         _reportService = reportService;
         _shardedDbContextFactory = shardedDbContextFactory;

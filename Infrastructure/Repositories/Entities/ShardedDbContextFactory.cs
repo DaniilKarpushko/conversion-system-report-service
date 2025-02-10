@@ -5,27 +5,32 @@ using Microsoft.Extensions.Options;
 
 namespace KafkaInfrastructure.Repositories.Entities;
 
-public class SharedDbContextFactory
+public interface IShardedDbContextFactory
+{
+    public ShardedDbContext CreateDbContext(int objectId);
+}
+
+public class ShardedDbContextFactory: IShardedDbContextFactory
 {
     private readonly IConfiguration _configuration;
     private readonly IOptions<ShardingOptions> _shardingOptions;
     
-    public SharedDbContextFactory(IConfiguration configuration, IOptions<ShardingOptions> shardingOptions)
+    public ShardedDbContextFactory(IConfiguration configuration, IOptions<ShardingOptions> shardingOptions)
     {
         _configuration = configuration;
         _shardingOptions = shardingOptions;
     }
     
-    public ShardedReportDbContext CreateDbContext(int objectId)
+    public ShardedDbContext CreateDbContext(int objectId)
     {
         var connectionString = GetConnectionString(GetShardNumber(objectId));
         ArgumentNullException.ThrowIfNull(connectionString);
 
-        var options = new DbContextOptionsBuilder<ShardedReportDbContext>()
+        var options = new DbContextOptionsBuilder<ShardedDbContext>()
             .UseNpgsql(connectionString)
             .Options;
         
-        return new ShardedReportDbContext(options);
+        return new ShardedDbContext(options);
 
     }
 

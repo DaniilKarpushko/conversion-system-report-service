@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddOptions<ShardingOptions>().Bind(configuration.GetSection("ShardingOptions"));
-        serviceCollection.AddSingleton<SharedDbContextFactory>();
+        serviceCollection.AddSingleton<ShardedDbContextFactory>();
         
         return serviceCollection;
     }
