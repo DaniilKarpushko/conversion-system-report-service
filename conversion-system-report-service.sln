@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversionSystemReportService", "ConversionSystemReportService\ConversionSystemReportService.csproj", "{71557B2A-6217-496E-BAB3-8304D3C146F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversionSystemReportService", "ConversionSystemReportService\conversionSystemReportService.csproj", "{71557B2A-6217-496E-BAB3-8304D3C146F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B951262A-271B-4850-90BA-08C81CF24A19}"
 EndProject
