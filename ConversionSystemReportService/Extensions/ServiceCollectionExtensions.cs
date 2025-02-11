@@ -14,6 +14,7 @@ using KafkaInfrastructure.Extensions;
 using KafkaInfrastructure.Redis;
 using KafkaInfrastructure.Redis.Extensions;
 using KafkaInfrastructure.Repositories.Entities;
+using KafkaInfrastructure.Repositories.Interfaces;
 using KafkaInfrastructure.Repositories.Options;
 using KafkaInfrastructure.Serializers;
 using Microsoft.Extensions.Options;
@@ -32,7 +33,9 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddRedis(configuration);
         serviceCollection.Configure<ShardingOptions>(configuration.GetSection("ShardingOptions"));
 
-        serviceCollection.AddSingleton<IShardedDbContextFactory, ShardedDbContextFactory>();
+        serviceCollection.AddScoped<INpgsqlConnectionManager, NpgsqlConnectionManager>();
+        serviceCollection.AddScoped<IReportRepository, ReportRepository>();
+        serviceCollection.AddScoped<IProductRepository, ProductRepository>();
 
         serviceCollection.AddScoped<ICacheService<ReportResult>, RedisService<ReportResult>>();
         serviceCollection.AddScoped<IReportService, ReportService>();

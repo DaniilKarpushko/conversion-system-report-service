@@ -1,4 +1,5 @@
-﻿using conversionSystemReportService.Extensions;
+﻿using System.Collections;
+using conversionSystemReportService.Extensions;
 using conversionSystemReportService.Records;
 using conversionSystemReportService.Services;
 using conversionSystemReportService.Services.ConversionService;
@@ -7,6 +8,7 @@ using FluentAssertions.Common;
 using Google.Protobuf.WellKnownTypes;
 using KafkaInfrastructure.Redis;
 using KafkaInfrastructure.Repositories.Entities;
+using KafkaInfrastructure.Repositories.Interfaces;
 using KafkaInfrastructure.Repositories.Models;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -15,12 +17,12 @@ using ReportService = conversionSystemReportService.Services.ReportService;
 
 namespace Tests.ConversionServiceTests;
 
-public class ConversionServiceTests : IDisposable
+public class ConversionServiceTests
 {
     private readonly IConversionService _conversionService;
-    private readonly IDictionary<string, ReportResult> _cacheMock;
-    private readonly Mock<IReportService> _reportService;
-    private readonly ShardedDbContextMoq _contextFactoryMock;
+    private readonly Mock<IProductRepository> _productRepositoryMock;
+    private readonly IReportService _reportService;
+    private readonly IDictionary<string, ReportResult> _cache = new Dictionary<string, ReportResult>();
 
     public ConversionServiceTests()
     {
@@ -28,23 +30,38 @@ public class ConversionServiceTests : IDisposable
             .UseInMemoryDatabase(databaseName: "TestDb")
             .Options;
 
-        _contextFactoryMock = new ShardedDbContextMoq(options);
+        Mock<IReportRepository> reportRepositoryMock = new();
+        _productRepositoryMock = new Mock<IProductRepository>();
 
-        _cacheMock = new Dictionary<string, ReportResult>();
-        _reportService = new Mock<IReportService>();
-        _reportService.Setup(x => x.AddReportAsync(It.IsAny<ReportResult>(), It.IsAny<CancellationToken>()))
-            .Callback<ReportResult, CancellationToken>((report, CancellationToken) 
-                => _cacheMock.Add(report.ToReportDbo().ReportId, report)).Returns(Task.CompletedTask);
-        _reportService.Setup(x => x.GetReportStatusAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((string reportId, CancellationToken cancellationToken) => _cacheMock[reportId]);
+        Mock<ICacheService<ReportResult>> cacheServiceMock = new();
+        cacheServiceMock
+            .Setup(x => x.GetCacheAsync(It.IsAny<string>(), CancellationToken.None))
+            .ReturnsAsync((string id,CancellationToken cts) => _cache[id]);
 
-        _conversionService = new ConversionService(_reportService.Object, _contextFactoryMock);
+        cacheServiceMock.Setup(x =>
+                x.SetCacheAsync(It.IsAny<string>(), It.IsAny<ReportResult>(), CancellationToken.None))
+            .Callback<string, ReportResult, CancellationToken>((id, rr, cts) => _cache[id] = rr)
+            .Returns(Task.CompletedTask);
+
+        _reportService = new ReportService(cacheServiceMock.Object, reportRepositoryMock.Object);
+        _conversionService = new ConversionService(_reportService, _productRepositoryMock.Object);
     }
 
     [Test]
     public async Task ConversionTest_CorrectData_ReturnsCorrectResult()
     {
-        using var context = _contextFactoryMock.CreateDbContext(1);
+        _productRepositoryMock.Setup(x => x.GetViewedProductAmountAsync(
+                It.IsAny<int>(),
+                It.IsAny<DateTime>(),
+                It.IsAny<DateTime>(),
+                CancellationToken.None))
+            .ReturnsAsync(1);
+        _productRepositoryMock.Setup(x => x.GetPurchasedProductAmountAsync(
+            It.IsAny<int>(),
+            It.IsAny<DateTime>(),
+            It.IsAny<DateTime>(),
+            CancellationToken.None)).ReturnsAsync(1);
+        
 
         var requestId = $"1_{DateTime.MinValue.ToUniversalTime()}_{DateTime.MaxValue.ToUniversalTime()}";
         var request = new RequestValue
@@ -57,16 +74,11 @@ public class ConversionServiceTests : IDisposable
 
         await _conversionService.ConvertAsync(request, CancellationToken.None);
 
-        var report = await _reportService.Object.GetReportStatusAsync(requestId, CancellationToken.None);
+        var report = await _reportService.GetReportStatusAsync(requestId, CancellationToken.None);
         var reportDbo = report.ToReportDbo();
 
         reportDbo.Should().NotBeNull();
         reportDbo.State.Should().Be(ReportState.Completed);
         reportDbo.Ratio.Should().Be(1);
-    }
-
-    public void Dispose()
-    {
-        _contextFactoryMock.Dispose();
     }
 }

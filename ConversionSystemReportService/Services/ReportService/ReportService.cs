@@ -1,21 +1,20 @@
 ﻿using conversionSystemReportService.Extensions;
 using conversionSystemReportService.Records;
-using KafkaInfrastructure.Repositories.Entities;
-using Microsoft.EntityFrameworkCore;
 using KafkaInfrastructure.Redis;
-
+using KafkaInfrastructure.Repositories.Interfaces;
+using KafkaInfrastructure.Repositories.Models;
 
 namespace conversionSystemReportService.Services;
 
 public class ReportService : IReportService
 {
-    private readonly IShardedDbContextFactory _shardedDbContextFactory;
+    private readonly IReportRepository _reportRepository;
     private readonly ICacheService<ReportResult> _cacheService;
 
-    public ReportService(IShardedDbContextFactory shardedDbContextFactory, ICacheService<ReportResult> cacheService)
+    public ReportService(ICacheService<ReportResult> cacheService, IReportRepository reportRepository)
     {
-        _shardedDbContextFactory = shardedDbContextFactory;
         _cacheService = cacheService;
+        _reportRepository = reportRepository;
     }
 
     public async Task<ReportResult> GetReportStatusAsync(string reportId, CancellationToken cancellationToken)
@@ -23,22 +22,18 @@ public class ReportService : IReportService
         try
         {
             var result = await _cacheService.GetCacheAsync(reportId, cancellationToken);
-
             if (result is not null)
                 return result;
 
-            await using var dbContext = _shardedDbContextFactory.CreateDbContext(GetProductId(reportId));
-            var report = await dbContext.Reports.FirstOrDefaultAsync(
-                report => report.ReportId == reportId,
-                cancellationToken: cancellationToken);
-
-            return report is null
-                ? new ReportResult.Failed(reportId, "Report not found")
+            var report = await _reportRepository.GetReportAsync(reportId, cancellationToken);
+            return report.State == ReportState.Unknown 
+                ? new ReportResult.Failed(reportId, "Report do not found in repository") 
                 : report.ToReportResult();
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            
             var fail = new ReportResult.Failed(reportId, e.Message);
             await _cacheService.SetCacheAsync(reportId, fail, cancellationToken);
 
@@ -51,23 +46,15 @@ public class ReportService : IReportService
         var reportDbo = report.ToReportDbo();
         try
         {
-            await using var dbContext = _shardedDbContextFactory.CreateDbContext(GetProductId(reportDbo.ReportId));
-            
-            await dbContext.Reports.AddAsync(reportDbo, cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-
+            await _reportRepository.CreateReportAsync(reportDbo, cancellationToken);
             await _cacheService.SetCacheAsync(reportDbo.ReportId, report, cancellationToken);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            
             var failed = new ReportResult.Failed(reportDbo.ReportId, e.Message);
             await _cacheService.SetCacheAsync(reportDbo.ReportId, failed, cancellationToken);
         }
-    }
-    
-    private int GetProductId(string reportId)
-    {
-        return int.Parse(reportId.Split('_')[0]);
     }
 }

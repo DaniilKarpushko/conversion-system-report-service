@@ -1,8 +1,5 @@
-﻿using ConversionSystemReportService.Migratioins;
-using conversionSystemReportService.Records;
-using FluentMigrator.Runner;
+﻿using conversionSystemReportService.Records;
 using KafkaInfrastructure.Repositories.Models;
-using Microsoft.Extensions.Options;
 using Proto.Contracts;
 
 namespace conversionSystemReportService.Extensions;

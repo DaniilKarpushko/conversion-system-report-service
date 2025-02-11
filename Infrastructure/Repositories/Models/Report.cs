@@ -12,7 +12,7 @@ public class Report
     public double Ratio { get; set; }
     
     [Column("purchase_amount")]
-    public int PurchaseAmount { get; set; }
+    public long PurchaseAmount { get; set; }
     
     [Column("state")]
     public ReportState State { get; set; }
