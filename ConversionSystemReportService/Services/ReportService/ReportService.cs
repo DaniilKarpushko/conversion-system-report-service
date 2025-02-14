@@ -55,6 +55,8 @@ public class ReportService : IReportService
             
             var failed = new ReportResult.Failed(reportDbo.ReportId, e.Message);
             await _cacheService.SetCacheAsync(reportDbo.ReportId, failed, cancellationToken);
+
+            throw;
         }
     }
 }

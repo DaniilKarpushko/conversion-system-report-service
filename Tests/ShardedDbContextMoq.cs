@@ -21,7 +21,7 @@ public class ShardedDbContextMoq : IShardedDbContextFactory, IDisposable
 
     public ShardedDbContext CreateDbContext(int objectId)
     {
-        return _context; // Всегда возвращаем один и тот же контекст
+        return _context;
     }
 
     private void FullfillContext(ShardedDbContext context)

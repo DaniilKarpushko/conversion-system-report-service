@@ -42,6 +42,8 @@ public class ConversionService : IConversionService
         catch (Exception e)
         {
             Console.WriteLine(e);
+            
+            throw;
         }
     }
 }
